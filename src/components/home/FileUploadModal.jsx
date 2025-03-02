@@ -6,8 +6,7 @@ import { FaLink } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 
-const FileUploadModal = () => {
-  const [isLoading, setIsLoading] = useState(false);
+const FileUploadModal = ({ setLoading }) => {
   const { user } = useContext(AuthContext);
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
@@ -27,7 +26,8 @@ const FileUploadModal = () => {
   //   }, [user, navigate]);
 
   const onSubmit = async (data) => {
-    setIsLoading(true);
+    setLoading(true);
+
     const file = { file: data.file[0] };
     await axiosPublic
       .post("/upload/upload-file", file, {
@@ -37,21 +37,34 @@ const FileUploadModal = () => {
       })
       .then((res) => {
         if (res.data.success) {
-          axiosPublic
-            .post("/link/add-link", {
+          const link = [
+            {
               privacy: data.privacy,
               fileLink: res.data.file.id,
+              fileName: res.data.file.name,
               user: user.email,
-            })
-            .then((res) => {
-              if (res.data.success) {
-                toast.success("File uploaded successfully");
-                setIsLoading(false);
-                reset();
-              }
-            });
+            },
+          ];
+          Promise.all([
+            axiosPublic.post("/link/add-link", {
+              privacy: data.privacy,
+              fileLink: res.data.file.id,
+              fileName: res.data.file.name,
+              user: user.email,
+            }),
+            axiosPublic.post(`/user/post-link/${user?.email}`, { link }),
+          ]).then((responses) => {
+            if (
+              responses.every((response) => response.data.acknowledged === true)
+            ) {
+              toast.success("File uploaded successfully");
+              document.getElementById("fileUploadModal").close();
+              setLoading(false);
+              reset();
+            }
+          });
         }
-        setIsLoading(false);
+        setLoading(false);
         reset();
       });
   };
