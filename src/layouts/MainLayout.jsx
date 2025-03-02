@@ -22,9 +22,9 @@ function MainLayout() {
   };
 
   return (
-    <div className="min-h-screen min-w-screen flex flex-col justify-between font-poppins overflow-x-hidden">
+    <div className="min-h-screen flex flex-col justify-between font-poppins overflow-x-hidden">
       <Navbar toggleTheme={toggleTheme} currentTheme={theme} />
-      <div className="container mx-auto max-w-[1200px] px-5 md:px-0">
+      <div className="container mx-auto max-w-[1200px] px-5 md:px-0 ">
         <Outlet />
       </div>
       <Footer />

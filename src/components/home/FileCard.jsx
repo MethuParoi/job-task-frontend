@@ -28,7 +28,7 @@ const FileCard = ({ link }) => {
         <IoLink className="text-2xl" />
       </div>
       <h3 className="text-xl font-semibold line-clamp-2">{link.fileName}</h3>
-      <div className="badge badge-success">
+      <div className="badge badge-success bg-indigo-300 border-transparent text-yellow-100 text-md font-semibold rounded-md">
         {link.privacy === "public" ? (
           <MdOutlinePublic />
         ) : (

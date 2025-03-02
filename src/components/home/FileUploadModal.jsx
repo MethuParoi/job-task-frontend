@@ -6,7 +6,7 @@ import { FaLink } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 
-const FileUploadModal = ({ setLoading }) => {
+const FileUploadModal = ({ setLoading, setRefetch }) => {
   const { user } = useContext(AuthContext);
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
@@ -59,6 +59,7 @@ const FileUploadModal = ({ setLoading }) => {
             ) {
               toast.success("File uploaded successfully");
               document.getElementById("fileUploadModal").close();
+              setRefetch((prev) => !prev);
               setLoading(false);
               reset();
             }
