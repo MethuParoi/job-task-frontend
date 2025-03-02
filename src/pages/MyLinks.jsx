@@ -3,8 +3,8 @@ import FileUploadModal from "../components/home/FileUploadModal";
 import { AuthContext } from "../provider/AuthProvider";
 import Loader from "../components/ui/Loader/Loader";
 import useAxiosPublic from "../hooks/useAxiosPublic";
-import FileCard from "../components/home/FileCard";
 import { useNavigate } from "react-router";
+import MyLinksCard from "../components/my-links/MyLinksCard";
 
 const MyLinks = () => {
   const [loading, setLoading] = useState(false);
@@ -44,7 +44,7 @@ const MyLinks = () => {
           </div>
         )}
         {links?.map((link) => (
-          <FileCard key={link._id} link={link} />
+          <MyLinksCard key={link._id} link={link} setRefetch={setRefetch} />
         ))}
       </div>
 

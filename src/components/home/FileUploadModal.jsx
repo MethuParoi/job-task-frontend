@@ -18,17 +18,19 @@ const FileUploadModal = ({ setLoading, setRefetch }) => {
     reset,
   } = useForm();
 
-  //check if user exist or not
-  //   useEffect(() => {
-  //     if (!user?.email) {
-  //       navigate("/login");
-  //     }
-  //   }, [user, navigate]);
+  //random taskId
+  const linkId = Math.floor(Math.random() * 10000);
 
   const onSubmit = async (data) => {
     setLoading(true);
 
     const file = { file: data.file[0] };
+    const expirationHours = data.expiration ? parseInt(data.expiration) : null;
+    const expirationTime =
+      expirationHours !== null
+        ? new Date(Date.now() + expirationHours * 60 * 60 * 1000)
+        : null;
+
     await axiosPublic
       .post("/upload/upload-file", file, {
         headers: {
@@ -43,14 +45,21 @@ const FileUploadModal = ({ setLoading, setRefetch }) => {
               fileLink: res.data.file.id,
               fileName: res.data.file.name,
               user: user.email,
+              linkId,
+              createdAt: new Date().toISOString(),
+              expiresAt: expirationTime ? expirationTime.toISOString() : null,
             },
           ];
+
           Promise.all([
             axiosPublic.post("/link/add-link", {
               privacy: data.privacy,
               fileLink: res.data.file.id,
               fileName: res.data.file.name,
               user: user.email,
+              linkId,
+              createdAt: new Date().toISOString(),
+              expiresAt: expirationTime ? expirationTime.toISOString() : null,
             }),
             axiosPublic.post(`/user/post-link/${user?.email}`, { link }),
           ]).then((responses) => {
@@ -69,6 +78,53 @@ const FileUploadModal = ({ setLoading, setRefetch }) => {
         reset();
       });
   };
+
+  //   const onSubmit = async (data) => {
+  //     setLoading(true);
+
+  //     const file = { file: data.file[0] };
+  //     await axiosPublic
+  //       .post("/upload/upload-file", file, {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       })
+  //       .then((res) => {
+  //         if (res.data.success) {
+  //           const link = [
+  //             {
+  //               privacy: data.privacy,
+  //               fileLink: res.data.file.id,
+  //               fileName: res.data.file.name,
+  //               user: user.email,
+  //               linkId,
+  //             },
+  //           ];
+  //           Promise.all([
+  //             axiosPublic.post("/link/add-link", {
+  //               privacy: data.privacy,
+  //               fileLink: res.data.file.id,
+  //               fileName: res.data.file.name,
+  //               user: user.email,
+  //               linkId,
+  //             }),
+  //             axiosPublic.post(`/user/post-link/${user?.email}`, { link }),
+  //           ]).then((responses) => {
+  //             if (
+  //               responses.every((response) => response.data.acknowledged === true)
+  //             ) {
+  //               toast.success("File uploaded successfully");
+  //               document.getElementById("fileUploadModal").close();
+  //               setRefetch((prev) => !prev);
+  //               setLoading(false);
+  //               reset();
+  //             }
+  //           });
+  //         }
+  //         setLoading(false);
+  //         reset();
+  //       });
+  //   };
   return (
     <dialog id="fileUploadModal" className="modal">
       <div className="modal-box">
@@ -115,6 +171,29 @@ const FileUploadModal = ({ setLoading, setRefetch }) => {
             {errors.privacy && (
               <span className="text-red-500 absolute bottom-[-25px] left-0">
                 {errors.privacy.message}
+              </span>
+            )}
+          </div>
+
+          <div className="relative mb-8">
+            <label className="block mb-2 font-medium">
+              Expiration Time (in hours)
+            </label>
+            <input
+              type="number"
+              min="1"
+              {...register("expiration", {
+                min: {
+                  value: 1,
+                  message: "Expiration time must be at least 1 hour",
+                },
+              })}
+              placeholder="Leave empty for no expiration"
+              className="input w-[265px] max-w-xs bg-gray-200 p-2 rounded"
+            />
+            {errors.expiration && (
+              <span className="text-red-500 absolute bottom-[-25px] left-0">
+                {errors.expiration.message}
               </span>
             )}
           </div>

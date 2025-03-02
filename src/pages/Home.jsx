@@ -60,6 +60,14 @@ const Home = () => {
             </h2>
           </div>
         )}
+
+        {links?.length === 0 && (
+          <div className="flex justify-center items-center gap-x-2 mb-2 sm:col-span-2 md:col-span-3 lg:col-span-4">
+            <h2 className="text-xl font-semibold text-indigo-400">
+              No links found!
+            </h2>
+          </div>
+        )}
         {links.map((link) => (
           <FileCard key={link._id} link={link} />
         ))}

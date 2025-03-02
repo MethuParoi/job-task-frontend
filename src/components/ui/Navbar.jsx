@@ -47,7 +47,7 @@ const Navbar = () => {
               onClick={() => navigate("/my-links")}
               className="px-4 py-2 bg-yellow-200 rounded-xl text-lg text-gray-500 cursor-pointer hover:bg-yellow-300"
             >
-              My Links
+              Manage Links
             </button>
             <button
               onClick={() => handleLogout()}
