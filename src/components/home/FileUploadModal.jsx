@@ -1,14 +1,16 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { AuthContext } from "../../provider/AuthProvider";
 import { useForm } from "react-hook-form";
 import { FaLink } from "react-icons/fa6";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 const FileUploadModal = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useContext(AuthContext);
   const axiosPublic = useAxiosPublic();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -16,6 +18,13 @@ const FileUploadModal = () => {
     formState: { errors },
     reset,
   } = useForm();
+
+  //check if user exist or not
+  //   useEffect(() => {
+  //     if (!user?.email) {
+  //       navigate("/login");
+  //     }
+  //   }, [user, navigate]);
 
   const onSubmit = async (data) => {
     setIsLoading(true);
@@ -27,7 +36,21 @@ const FileUploadModal = () => {
         },
       })
       .then((res) => {
-        toast.success("File uploaded successfully");
+        if (res.data.success) {
+          axiosPublic
+            .post("/link/add-link", {
+              privacy: data.privacy,
+              fileLink: res.data.file.id,
+              user: user.email,
+            })
+            .then((res) => {
+              if (res.data.success) {
+                toast.success("File uploaded successfully");
+                setIsLoading(false);
+                reset();
+              }
+            });
+        }
         setIsLoading(false);
         reset();
       });
@@ -60,6 +83,24 @@ const FileUploadModal = () => {
             {errors.file && (
               <span className="text-red-500 absolute bottom-[-25px] left-0">
                 {errors.file.message}
+              </span>
+            )}
+          </div>
+
+          <div className="relative mb-8">
+            <label className="block mb-2 font-medium">Privacy</label>
+            <select
+              {...register("privacy", {
+                required: "Privacy selection is required",
+              })}
+              className="select-input w-[265px] max-w-xs bg-gray-200"
+            >
+              <option value="public">Public</option>
+              <option value="private">Private</option>
+            </select>
+            {errors.privacy && (
+              <span className="text-red-500 absolute bottom-[-25px] left-0">
+                {errors.privacy.message}
               </span>
             )}
           </div>

@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useContext } from "react";
 import { FaLink } from "react-icons/fa6";
 import { useNavigate } from "react-router";
+import { AuthContext } from "../../provider/AuthProvider";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
   return (
     <div className="navbar bg-indigo-300 text-yellow-100 shadow-sm px-8">
@@ -35,7 +37,12 @@ const Navbar = () => {
       </div>
       <div className="navbar-end flex gap-x-4 items-center">
         <button
-          onClick={() => document.getElementById("fileUploadModal").showModal()}
+          onClick={() => {
+            if (!user?.email) {
+              navigate("/login");
+            }
+            document.getElementById("fileUploadModal").showModal();
+          }}
           className="px-4 py-2 bg-yellow-200 rounded-xl text-lg text-gray-500 cursor-pointer hover:bg-yellow-300 flex gap-x-2 items-center"
         >
           <p>Create Link</p>
@@ -52,4 +59,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar
+export default Navbar;
