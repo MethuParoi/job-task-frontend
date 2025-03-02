@@ -1,9 +1,12 @@
-import React from 'react'
+import FileUploadModal from "../components/home/FileUploadModal";
 
 const Home = () => {
   return (
-    <div>Home</div>
-  )
-}
+    <div>
+      <h1>Home</h1>
+      <FileUploadModal />
+    </div>
+  );
+};
 
-export default Home
+export default Home;
