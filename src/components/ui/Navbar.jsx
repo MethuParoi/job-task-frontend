@@ -20,9 +20,12 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar bg-indigo-300 text-yellow-100 shadow-sm px-8">
-      <div className="navbar-start">
-        <a className="btn btn-ghost text-xl">ShareLink</a>
+    <div className="navbar bg-indigo-300 text-yellow-100 shadow-sm px-8 py-5">
+      <div
+        onClick={() => navigate("/")}
+        className="navbar-start cursor-pointer"
+      >
+        <h1 className="text-3xl font-semibold">ShareLink</h1>
       </div>
 
       <div className="navbar-end flex gap-x-4 items-center">
@@ -39,12 +42,20 @@ const Navbar = () => {
           <FaLink />
         </button>
         {user?.email ? (
-          <button
-            onClick={() => handleLogout()}
-            className="px-4 py-2 bg-yellow-200 rounded-xl text-lg text-gray-500 cursor-pointer hover:bg-yellow-300"
-          >
-            Logout
-          </button>
+          <>
+            <button
+              onClick={() => navigate("/my-links")}
+              className="px-4 py-2 bg-yellow-200 rounded-xl text-lg text-gray-500 cursor-pointer hover:bg-yellow-300"
+            >
+              My Links
+            </button>
+            <button
+              onClick={() => handleLogout()}
+              className="px-4 py-2 bg-yellow-200 rounded-xl text-lg text-gray-500 cursor-pointer hover:bg-yellow-300"
+            >
+              Logout
+            </button>
+          </>
         ) : (
           <button
             onClick={() => navigate("/login")}

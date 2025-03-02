@@ -213,7 +213,7 @@ const Register = () => {
             <button
               type="button"
               onClick={togglePasswordVisibility}
-              className="absolute inset-y-0 right-4 top-0 flex items-center text-gray-600 hover:text-gray-800"
+              className="absolute inset-y-0 right-4 top-5 flex items-center text-gray-600 hover:text-gray-800"
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
@@ -224,7 +224,7 @@ const Register = () => {
 
           <button
             type="submit"
-            className="w-full py-2 mt-4 font-semibold text-white bg-primary rounded-md hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg"
+            className="w-full px-4 py-2 text-lg font-medium text-white bg-indigo-400 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
           >
             Sign Up
           </button>
@@ -232,7 +232,7 @@ const Register = () => {
 
         <button
           onClick={() => handleGoogleSignIn()}
-          className="w-full flex justify-center items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-secondary rounded-md hover:bg-primary focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full flex justify-center items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-400 rounded-md hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
         >
           <FaGoogle />
           <p className="text-lg">Login with Google</p>
